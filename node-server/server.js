@@ -62,6 +62,11 @@ router.route('/spaitem')
 			}
         });
 	});
+	
+router.route('/metadata')
+	.get(function(req,res) {
+		res.send(ApolloSPAItem.schema.paths);
+	});
 
 router.route('/history')
 	.get(function(req,res) {

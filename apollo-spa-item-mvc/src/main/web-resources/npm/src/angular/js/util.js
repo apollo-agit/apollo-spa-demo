@@ -33,14 +33,17 @@
     			var index=0;
     			var formFields = new Array();
     			
-    			 $.each(schema.properties, function(key, value) {
+    			 $.each(schema, function(key, value) {
             		var formField = new Object();
             		formField.templateOptions = new Object();
             		
             		formField.key = key;
             		
-            		switch(value.type) {
-            			case 'string':
+            		switch(value.instance) {
+            			case 'String':
+            				formField.type = 'input';
+            				break;
+            			case 'Number':
             				formField.type = 'input';
             				break;
             			case 'text':
@@ -52,8 +55,6 @@
             				formField.type = 'input';
             				formField.templateOptions.disabled = 'true';
             				break;
-            			default:
-            				formField.type = 'input';
             		}
             		
             		formField.templateOptions.required = value.required;

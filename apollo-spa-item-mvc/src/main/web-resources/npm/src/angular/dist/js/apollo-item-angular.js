@@ -140,9 +140,12 @@ apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 
 
 apolloItemServices.factory('ApolloNewItem', [ '$resource', function($resource) {
-	return $resource('/service/apolloitems/item', {id:'@id'}, {
+	return $resource('http://localhost:8888/api/apollospaitems/spaitem', {id:'@id'}, {
 		head : {
-			url : '/service/apolloitems/item/metadata',
+			url : 'http://localhost:8888/api/apollospaitems/metadata',
+			method: 'GET'
+		},
+		find : {
 			method: 'GET'
 		},
 		submit : {
@@ -234,14 +237,17 @@ apolloMaintenanceControllers.controller('ApolloHistoryController', [ '$scope', '
     			var index=0;
     			var formFields = new Array();
     			
-    			 $.each(schema.properties, function(key, value) {
+    			 $.each(schema, function(key, value) {
             		var formField = new Object();
             		formField.templateOptions = new Object();
             		
             		formField.key = key;
             		
-            		switch(value.type) {
-            			case 'string':
+            		switch(value.instance) {
+            			case 'String':
+            				formField.type = 'input';
+            				break;
+            			case 'Number':
             				formField.type = 'input';
             				break;
             			case 'text':
@@ -253,8 +259,6 @@ apolloMaintenanceControllers.controller('ApolloHistoryController', [ '$scope', '
             				formField.type = 'input';
             				formField.templateOptions.disabled = 'true';
             				break;
-            			default:
-            				formField.type = 'input';
             		}
             		
             		formField.templateOptions.required = value.required;
