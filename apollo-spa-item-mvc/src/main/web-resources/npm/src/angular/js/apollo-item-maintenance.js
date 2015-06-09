@@ -22,7 +22,7 @@ apolloItemServices.factory('ApolloItems', [ '$resource', function($resource) {
 
 var removeTemplate = '<input type="button" value="remove" ng-click="removeRow($index)" />';
 
-var linkCellTemplate = '<a ng-href="#/history/{{row.entity.id}}">{{row.entity.id}}</a>';
+var linkCellTemplate = '<a ng-href="#/history/{{row.entity._id}}">{{row.entity._id}}</a>';
 
 apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 		'$scope', 'ApolloItems', function($scope, ApolloItems) {
@@ -32,7 +32,7 @@ apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 			
 			    $scope.gridOptions = { 
 			        data: 'apolloItems',
-			        columnDefs: [{field:'id', displayName:'Item Id',  cellTemplate: linkCellTemplate},
+			        columnDefs: [{field:'_id', displayName:'Item Id',  cellTemplate: linkCellTemplate},
 			                     {field:'apolloItemName', displayName:'Item Name', enableCellEdit: true}, 
 			                     {field:'apolloItemAmount', displayName:'Item Cost', enableCellEdit: true},
 			                     {field:'apolloItemDesc', displayName:'Item Description', enableCellEdit: true},
@@ -66,7 +66,7 @@ apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 				 $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' }); 
 				  var index = this.row.rowIndex;
 				  var value = $scope.apolloItems[index];
-                  ApolloItems.remove({id:value.id}, value, function(index){
+                  ApolloItems.remove({id:value._id}, value, function(index){
                 	  $scope.apolloItems = ApolloItems.query();
                   });
                   
