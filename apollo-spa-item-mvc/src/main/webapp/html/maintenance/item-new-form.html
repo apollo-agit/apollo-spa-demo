@@ -1,0 +1,23 @@
+
+<div class="well bs-component">
+
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">New Item Maintenance Form</h3>
+		</div>
+
+		<div class="panel-body">
+			<div ng-controller="ApolloNewItemController as vm">
+				<button ng-click="loadProperties()">Load Properties</button>
+				<form name="myForm" class="form-horizontal" role="form"
+					ng-submit="submitForm()">
+					<formly-form model="vm.apolloItem" fields="vm.formFields">
+					<button type="submit" class="btn btn-primary"
+						ng-click="vm.submit(vm.apolloItem)">Submit</button>
+					</formly-form>
+				</form>
+			</div>
+		</div>
+
+	</div>
+</div>
