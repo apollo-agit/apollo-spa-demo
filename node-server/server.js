@@ -8,10 +8,8 @@ var application_root = __dirname,
 	bodyParser = require('body-parser');
 	
 var ApolloSPAItem = require('./app/models/apolloitem');
+var ItemHistory = require('./app/models/itemhistory');
 var cors = require('cors');
-
-
-
 	
 mongoose.connect('mongodb://sysUser:myPassword1@inertia-0.inertia-inc.1272.mongodbdns.com:27000/apollo');
 
@@ -44,13 +42,15 @@ router.route('/spaitem')
         });
     })
 	.post(function(req, res) {
-        var apolloSpaItem = new ApolloSPAItem(req.body).save(function(err) {
+        new ApolloSPAItem(req.body).save(function(err, item) {
             if (err)
                 res.send(err);
-			else 
-				res.json(apolloSpaItem);
+			else {
+				var history = new ItemHistory({apolloItemId:item._id, itemUpdateBy: 'Ian', itemUpdateNote: 'Updated During NodeJS POST'})
+					.save();
+				res.json(item);
+			}
         });
-        
     }).delete(function(req, res) {
 		console.log(req.query.id);
 		 ApolloSPAItem.findById(req.query.id, function(err, apolloSPAItem) {
@@ -63,7 +63,19 @@ router.route('/spaitem')
         });
 	});
 
+router.route('/history')
+	.get(function(req,res) {
+		console.log(req.query.itemId)
+		ItemHistory.find({apolloItemId:req.query.itemId}, function(err, itemHistories) {
+			if (err)
+                res.send(err);
+			else
+				res.json(itemHistories);
+		});
+	});
+	
 app.use('/api/apollospaitems/', router);
+
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
