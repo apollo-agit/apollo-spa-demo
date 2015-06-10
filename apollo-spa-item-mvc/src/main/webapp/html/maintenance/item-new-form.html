@@ -9,7 +9,7 @@
 		<div class="panel-body">
 			<div ng-controller="ApolloNewItemController as vm">
 				<button ng-click="loadProperties()">Load Properties</button>
-				<form name="myForm" class="form-horizontal" role="form"
+				<form name="myForm" role="form"
 					ng-submit="submitForm()">
 					<formly-form model="vm.apolloItem" fields="vm.formFields">
 					<button type="submit" class="btn btn-primary"

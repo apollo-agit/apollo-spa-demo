@@ -39,28 +39,28 @@
             		
             		formField.key = key;
             		
-            		switch(value.instance) {
-            			case 'String':
-            				formField.type = 'input';
-            				break;
-            			case 'Number':
-            				formField.type = 'input';
-            				break;
-            			case 'text':
-            				formField.type = 'textarea';
-            				formField.templateOptions.rows = 4;
-            				formField.templateOptions.cols = 15;
-            				break;
-            			case 'id':
-            				formField.type = 'input';
-            				formField.templateOptions.disabled = 'true';
-            				break;
+            		if(key == '__v')
+            			formField = null;
+            		else if (key == '_id') {
+        				formField.type = 'input';
+        				formField.templateOptions.disabled = 'true';
+            		}
+            		else if(value.instance == 'String' && value.options.max > 500) {
+        				formField.type = 'textarea';
+        				formField.templateOptions.rows = 4;
+        				formField.templateOptions.cols = 15;
+            		} else if (value.instance == 'String'){
+            			formField.type = 'input';
+            		}else if (value.instance == 'Number'){
+            			formField.type = 'input';
             		}
             		
-            		formField.templateOptions.required = value.required;
-            		formField.templateOptions.label = key.replaceAll("_", " ");        		
+            		if(formField != null) {
+	            		formField.templateOptions.required = value.isRequired;
+	            		formField.templateOptions.label = key.replaceAll("_", " ");     		
+	            		formFields[index++] = formField;
+            		}
             		
-            		formFields[index++] = formField;
             	 });
     			 
     			 return formFields;

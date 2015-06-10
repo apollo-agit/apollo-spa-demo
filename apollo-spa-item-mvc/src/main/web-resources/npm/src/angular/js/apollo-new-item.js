@@ -28,12 +28,17 @@ apolloMaintenanceControllers.controller('ApolloNewItemController', [
 			vm.apolloItem = {};
 			
 			vm.submit = function() {
+				$.blockUI({ message: '<h1><img src="images/busy.gif" /> Just a moment...</h1>' }); 
 				ApolloNewItem.submit({id:vm.apolloItem.id}, vm.apolloItem).$promise.then(
 						function(successResult) {
-							vm.apolloItem = result;
+							vm.apolloItem.id = successResult._id;
 					    }, function(errorResult) {
 					        alert(errorResult);
 					    });
+				
+				 setTimeout(function(){
+	 					 $.unblockUI(); 
+	 				  }, 1000);
 			}
 			
 			 $scope.loadProperties = function() {

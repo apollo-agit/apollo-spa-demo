@@ -109,20 +109,26 @@ apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 
 				 //hack for visual
 				 setTimeout(function(){
+	               	  $scope.apolloItems.length = 0;
+	             	  $scope.apolloItems = ApolloItems.query();
 					 $.unblockUI(); 
 				  }, 2000);
 			 };
 			 
 			 $scope.removeRow = function() {
-				 $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' }); 
+				 $.blockUI({ message: '<h1><img src="images/busy.gif" /> Just a moment...</h1>' }); 
 				  var index = this.row.rowIndex;
 				  var value = $scope.apolloItems[index];
-                  ApolloItems.remove({id:value._id}, value, function(index){
-                	  $scope.apolloItems = ApolloItems.query();
+                  ApolloItems.remove({id:value._id}, function(){
+                	  console.log('item deleted')
+                  }, function() {
+                	  console.log('item error during delete');
                   });
                   
                   //hack for visual
  				 setTimeout(function(){
+               	  $scope.apolloItems.length = 0;
+             	  $scope.apolloItems = ApolloItems.query();
  					 $.unblockUI(); 
  				  }, 1000);
 			 };
@@ -161,12 +167,17 @@ apolloMaintenanceControllers.controller('ApolloNewItemController', [
 			vm.apolloItem = {};
 			
 			vm.submit = function() {
+				$.blockUI({ message: '<h1><img src="images/busy.gif" /> Just a moment...</h1>' }); 
 				ApolloNewItem.submit({id:vm.apolloItem.id}, vm.apolloItem).$promise.then(
 						function(successResult) {
-							vm.apolloItem = result;
+							vm.apolloItem.id = successResult._id;
 					    }, function(errorResult) {
 					        alert(errorResult);
 					    });
+				
+				 setTimeout(function(){
+	 					 $.unblockUI(); 
+	 				  }, 1000);
 			}
 			
 			 $scope.loadProperties = function() {
@@ -243,28 +254,28 @@ apolloMaintenanceControllers.controller('ApolloHistoryController', [ '$scope', '
             		
             		formField.key = key;
             		
-            		switch(value.instance) {
-            			case 'String':
-            				formField.type = 'input';
-            				break;
-            			case 'Number':
-            				formField.type = 'input';
-            				break;
-            			case 'text':
-            				formField.type = 'textarea';
-            				formField.templateOptions.rows = 4;
-            				formField.templateOptions.cols = 15;
-            				break;
-            			case 'id':
-            				formField.type = 'input';
-            				formField.templateOptions.disabled = 'true';
-            				break;
+            		if(key == '__v')
+            			formField = null;
+            		else if (key == '_id') {
+        				formField.type = 'input';
+        				formField.templateOptions.disabled = 'true';
+            		}
+            		else if(value.instance == 'String' && value.options.max > 500) {
+        				formField.type = 'textarea';
+        				formField.templateOptions.rows = 4;
+        				formField.templateOptions.cols = 15;
+            		} else if (value.instance == 'String'){
+            			formField.type = 'input';
+            		}else if (value.instance == 'Number'){
+            			formField.type = 'input';
             		}
             		
-            		formField.templateOptions.required = value.required;
-            		formField.templateOptions.label = key.replaceAll("_", " ");        		
+            		if(formField != null) {
+	            		formField.templateOptions.required = value.isRequired;
+	            		formField.templateOptions.label = key.replaceAll("_", " ");     		
+	            		formFields[index++] = formField;
+            		}
             		
-            		formFields[index++] = formField;
             	 });
     			 
     			 return formFields;

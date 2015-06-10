@@ -58,20 +58,26 @@ apolloMaintenanceControllers.controller('ApolloItemMaintenanceController', [
 
 				 //hack for visual
 				 setTimeout(function(){
+	               	  $scope.apolloItems.length = 0;
+	             	  $scope.apolloItems = ApolloItems.query();
 					 $.unblockUI(); 
 				  }, 2000);
 			 };
 			 
 			 $scope.removeRow = function() {
-				 $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' }); 
+				 $.blockUI({ message: '<h1><img src="images/busy.gif" /> Just a moment...</h1>' }); 
 				  var index = this.row.rowIndex;
 				  var value = $scope.apolloItems[index];
-                  ApolloItems.remove({id:value._id}, value, function(index){
-                	  $scope.apolloItems = ApolloItems.query();
+                  ApolloItems.remove({id:value._id}, function(){
+                	  console.log('item deleted')
+                  }, function() {
+                	  console.log('item error during delete');
                   });
                   
                   //hack for visual
  				 setTimeout(function(){
+               	  $scope.apolloItems.length = 0;
+             	  $scope.apolloItems = ApolloItems.query();
  					 $.unblockUI(); 
  				  }, 1000);
 			 };

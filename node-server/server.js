@@ -42,17 +42,27 @@ router.route('/spaitem')
         });
     })
 	.post(function(req, res) {
-        new ApolloSPAItem(req.body).save(function(err, item) {
-            if (err)
-                res.send(err);
-			else {
-				var history = new ItemHistory({apolloItemId:item._id, itemUpdateBy: 'Ian', itemUpdateNote: 'Updated During NodeJS POST'})
-					.save();
-				res.json(item);
-			}
+		if(req.body._id == null) {
+	        new ApolloSPAItem(req.body).save(function(err, item) {
+	            if (err)
+	                res.send(err);
+				else {
+					var history = new ItemHistory({apolloItemId:item._id, itemUpdateBy: 'Ian', itemUpdateNote: 'Saved During NodeJS POST'})
+						.save();
+					res.json(item);
+				}
         });
+		} else {
+			ApolloSPAItem.update({_id:req.body._id}, req.body, {}, function(err, item) {
+	            if (err)
+	                res.send(err);
+				else
+					var history = new ItemHistory({apolloItemId:req.body._id, itemUpdateBy: 'Ian', itemUpdateNote: 'Updated During NodeJS POST'})
+						.save();
+					res.json(item);
+	        });
+		}
     }).delete(function(req, res) {
-		console.log(req.query.id);
 		 ApolloSPAItem.findById(req.query.id, function(err, apolloSPAItem) {
             if (err)
                 res.send(err);
@@ -70,7 +80,6 @@ router.route('/metadata')
 
 router.route('/history')
 	.get(function(req,res) {
-		console.log(req.query.itemId)
 		ItemHistory.find({apolloItemId:req.query.itemId}, function(err, itemHistories) {
 			if (err)
                 res.send(err);
