@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var ApolloSPAItemSchema = new Schema({
 	apolloItemName: {type: String, required: true},
 	apolloItemDesc: {type: String, max: 4000},
-	apolloItemAmount: Number
+	apolloItemAmount: Number,
+	popLevel: Number
 });
 
 module.exports = mongoose.model('ApolloSPAItem', ApolloSPAItemSchema);

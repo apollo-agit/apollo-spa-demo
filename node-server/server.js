@@ -93,3 +93,4 @@ app.use('/api/apollospaitems/', router);
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
+

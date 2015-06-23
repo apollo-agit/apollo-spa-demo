@@ -66,7 +66,7 @@ only needed if code change is required.
 1. Install NodeJS (https://nodejs.org/download/)
 2. After NodeJS installation execute the following command ```npm install -g grunt-cli```
 3. Execute the /apollo-item-mvc/src/main/web-resources/npm-install-script.sh
-4. Execute the following command at /apollo-item-mvc/src/main/web-resources/npm/
+4. Execute the following command at /apollo-spa-item-mvc/src/main/web-resources/npm/
   *  ```grunt```
   *  The above command will compile all the JS/CSS mixins and run an lint unit tests
 
@@ -81,3 +81,10 @@ only needed if code change is required.
   *  ```mvn site org.pitest:pitest-maven:mutationCoverage``` 
 5. If using Apache Tomcat, the below configuration will need to be set in the <host> section of the server.xml
   *  ```<Context docBase="apollo-item-mvc-1.0-SNAPSHOT" path="/apollo-item-mvc" debug="0" reloadable="true"/>```
+  
+###Node JS Server - Build and Start
+1. Build Node JS Server
+	*execute ```npm install``` in /apollo-spa-demo/node-server
+2. run Node JS Sever
+ * execute ```node server.js``` in /apollo-spa-demo/node-server
+  
